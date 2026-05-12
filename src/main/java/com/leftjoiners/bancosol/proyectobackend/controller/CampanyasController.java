@@ -42,6 +42,7 @@ public class CampanyasController {
     public String listarCampanyas(Model model) {
         model.addAttribute("campanyas", campanyaRepo.findAll());
         model.addAttribute("currentSection", "campanyas");
+        model.addAttribute("eliminar", false);
         return "campanyas/campanya";
     }
 
@@ -50,6 +51,7 @@ public class CampanyasController {
         model.addAttribute("tiposCampanya", tipoCampanyaRepo.findAll());
         model.addAttribute("cadenas", cadenasRepo.findAll());
         model.addAttribute("editando", false);
+        model.addAttribute("currentSection", "campanyas");
         return "campanyas/formularioCampanya";
     }
 
@@ -76,7 +78,10 @@ public class CampanyasController {
         campanya.setTipoCampanya(tipoCampanyaRepo.findById(idTipo).get());
         campanya.setFechaInicio(fechaInicio);
         campanya.setFechaFin(fechaFin);
-        campanya.setCadenasParticipantes(cadenasRepo.findAllById(cadenasSeleccionadas));
+        if (cadenasSeleccionadas != null){
+            campanya.setCadenasParticipantes(cadenasRepo.findAllById(cadenasSeleccionadas));
+        }
+
 
         int duracion = (int) ChronoUnit.DAYS.between(fechaInicio, fechaFin) + 1;
         campanya.setDuracion(duracion);
@@ -84,6 +89,8 @@ public class CampanyasController {
         campanyaRepo.save(campanya);
         return "redirect:/campanyas";
     }
+
+
 
     @GetMapping("/editarCampanya")
     public String editarCampanya(@RequestParam("id") Integer id, Model model) {
@@ -108,16 +115,58 @@ public class CampanyasController {
         model.addAttribute("tiposCampanya", tipoCampanyaRepo.findAll());
         model.addAttribute("cadenas", cadenasRepo.findAll());
 
+        model.addAttribute("currentSection", "campanyas");
+
         return "campanyas/formularioCampanya";
     }
 
-    //No se usa por ahora
+    @GetMapping("/seleccionCampanyasEliminar")
+    public String seleccionarCampanyasEliminar(Model model){
+
+        model.addAttribute("campanyas", campanyaRepo.findAll());
+        model.addAttribute("currentSection", "campanyas");
+        model.addAttribute("eliminar", true);
+        return "campanyas/campanya";
+    }
+
+    @PostMapping("/eliminarCampanyas")
+    public String eliminarCampanyas(Model model,
+                                  @RequestParam(required = false, value="campanyasElim") List<Integer> idCampanyasEliminar
+                                  ){
+        if(idCampanyasEliminar!=null){
+            campanyaRepo.deleteAllById(idCampanyasEliminar);
+        } else {
+            return "redirect:/campanyas";
+        }
+
+
+        model.addAttribute("eliminar", false);
+        return "redirect:/campanyas";
+
+    }
+
+    // ==========
+
+
+
+
     @GetMapping("/gestionarCadenas")
     public String gestionarCadenas(Model model){
         List<Cadena> listaCadenas = cadenasRepo.findAll();
 
         model.addAttribute("cadenasSistema", listaCadenas);
         model.addAttribute("currentSection", "campanyas");
+        model.addAttribute("eliminar", false);
+        return "campanyas/cadenas";
+    }
+
+    @GetMapping("/seleccionCadenasEliminar")
+    public String seleccionarCadenasEliminar(Model model){
+        List<Cadena> listaCadenas = cadenasRepo.findAll();
+
+        model.addAttribute("cadenasSistema", listaCadenas);
+        model.addAttribute("currentSection", "campanyas");
+        model.addAttribute("eliminar", true);
         return "campanyas/cadenas";
     }
 
@@ -162,9 +211,11 @@ public class CampanyasController {
     }
 
     @PostMapping("/eliminarCadenasSistema")
-    public String guardarCadenas (@RequestParam("cadenas") List<Integer> idCadenasEliminar){
+    public String guardarCadenas (@RequestParam(required = false, value = "cadenas") List<Integer> idCadenasEliminar){
 
-        cadenasRepo.deleteAllById(idCadenasEliminar);
+        if(idCadenasEliminar != null){
+            cadenasRepo.deleteAllById(idCadenasEliminar);
+        }
 
         return "redirect:/campanyas/gestionarCadenas";
     }
