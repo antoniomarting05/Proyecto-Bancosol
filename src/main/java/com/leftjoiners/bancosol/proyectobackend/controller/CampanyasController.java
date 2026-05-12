@@ -146,12 +146,15 @@ public class CampanyasController {
     @PostMapping("/guardarCadena")
     public String guardarCadena(@RequestParam("nombre") String nombreCadena,
                                 @RequestParam("codigo") String codigoCadena,
-                                @RequestParam("id") Integer idCadena
+                                @RequestParam(required = false, value = "id" ) Integer idCadena
                                 ){
-        Cadena cadenaActual = cadenasRepo.findById(idCadena).get();
-        if (cadenaActual==null){
+        Cadena cadenaActual;
+        if (idCadena != null){
+             cadenaActual = cadenasRepo.findById(idCadena).get();
+        } else {
             cadenaActual = new Cadena();
         }
+
         cadenaActual.setNombre(nombreCadena);
         cadenaActual.setCodigo(codigoCadena);
         cadenasRepo.save(cadenaActual);

@@ -10,6 +10,7 @@
         <title>Gestión de Campañas</title>
         <link rel="stylesheet" href="/css/global.css">
         <link rel="stylesheet" href="/css/campanyas.css">
+        <link rel="stylesheet" href="/css/cadenas.css">
     </head>
     <body>
     <%
@@ -26,8 +27,11 @@
                     <p>Consulta las campañas creadas y genera nuevas campañas.</p>
                 </div>
                 <div class="campanya-list-actions">
-                    <a class="btn-outline" href="/campanyas/gestionarCadenas">Gestionar cadenas del sistema</a>
-                    <a href="/campanyas/crearCampanya" class="btn-primary">Generar nueva Campaña</a>
+                    <a class="btn-outline" href="/campanyas/gestionarCadenas">Gestionar Cadenas</a>
+                    <a href="/campanyas/crearCampanya" class="btn-primary">
+                        <span class="cadena-create-icon">+</span>
+                        <span> Nueva Campaña</span>
+                    </a>
                 </div>
             </div>
 

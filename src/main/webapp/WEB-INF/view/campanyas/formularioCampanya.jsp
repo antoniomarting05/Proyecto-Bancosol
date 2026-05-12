@@ -98,7 +98,10 @@
                             <%} else {%>
                                 <a href="/campanyas" class="btn-outline">Cancelar</a>
                            <%};%>
-                            <button type="submit" class="btn-primary">Guardar</button>
+                            <a class="btn-primary">
+                                <button type="submit" class="btn-primary" style="font-size: 15px ; padding: 0px" >Guardar</button>
+                            </a>
+
                         </section>
 
                     </form>
