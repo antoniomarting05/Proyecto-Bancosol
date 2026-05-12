@@ -90,6 +90,8 @@ public class CampanyasController {
         if (campanya == null) {
             return "redirect:/campanyas";
         }
+        model.addAttribute("currentSection", "campanyas");
+
         //VAlores de la campañana que estamos editando.
         model.addAttribute("nombreCampanya", campanya.getNombre());
         model.addAttribute("idCampanya", campanya.getId());
@@ -107,4 +109,19 @@ public class CampanyasController {
 
         return "campanyas/formularioCampanya";
     }
+
+    //No se usa por ahora
+    @GetMapping("/gestionarCadenas")
+    public String gestionarCadenas(Model model){
+        List<Cadena> listaCadenas = cadenasRepo.findAll();
+
+        model.addAttribute("cadenasSistema", listaCadenas);
+        return "campanyas/cadenas";
+    }
+
+    @PostMapping("/guardarCadenasSistema")
+    public String guardarCadenas (){
+        return "redirect:/campanyas";
+    }
+
 }

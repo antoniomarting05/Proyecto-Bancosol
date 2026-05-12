@@ -18,30 +18,42 @@
 
     <jsp:include page="../shared/navbar.jsp"/>
 
-    <main class="campanya-page">
+    <main class="main-page">
         <section class="campanya-list-wrapper">
             <div class="campanya-header">
                 <div>
                     <h1>Gestión de Campañas</h1>
                     <p>Consulta las campañas creadas y genera nuevas campañas.</p>
                 </div>
+                <div class="campanya-list-actions">
+                    <a class="btn-outline" href="/campanyas/gestionarCadenas">Gestionar cadenas del sistema</a>
+                    <a href="/campanyas/crearCampanya" class="btn-primary">Generar nueva Campaña</a>
+                </div>
             </div>
+
 
             <div class="card campanya-table-card">
                 <table class="modernTable">
                     <thead>
                         <tr>
-                            <th>Tipo Campaña</th>
+                            <th></th>
+                            <th>Tipo de campaña</th>
                             <th>Nombre</th>
-                            <th>Fecha Inicio</th>
-                            <th>Fecha Fin</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
                             <th>Cadenas participantes</th>
-                            <th>Acciones</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <% for(Campanya campanya : listaCampanyas) { %>
                         <tr>
+                            <td>
+                                <a class="edit-campanya-btn" href="/campanyas/editarCampanya?id=<%=campanya.getId()%>">
+                                    <span class="edit-campanya-icon">✎</span>
+                                    <span>Editar</span>
+                                </a>
+                            </td>
                             <td><%= campanya.getTipoCampanya().getNombre()%></td>
                             <td><%= campanya.getNombre() %></td>
                             <td><%= campanya.getFechaInicio().toString() %></td>
@@ -52,18 +64,14 @@
                                 <%};%>
                                 <%=campanya.getCadenasParticipantes().isEmpty() ? "Sin cadenas participantes" : ""%>
                             </td>
-                            <td>
-                                <a class="action-link" href="/campanyas/editarCampanya?id=<%=campanya.getId()%>">Editar</a>
-                            </td>
+
                         </tr>
                         <% }; %>
                     </tbody>
                 </table>
             </div>
 
-            <div class="campanya-list-actions">
-                <a href="/campanyas/crearCampanya" class="btn-primary">Generar nueva Campaña</a>
-            </div>
+
         </section>
     </main>
 

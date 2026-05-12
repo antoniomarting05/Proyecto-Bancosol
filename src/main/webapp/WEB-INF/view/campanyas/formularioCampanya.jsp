@@ -26,20 +26,12 @@
         List<Cadena> cadenasCampanyaActual = (List<Cadena>) request.getAttribute("cadenasCampanyaActual");
 
     %>
-        <header>
-            <img id="logo" src="/images/LOGO_BANCOSOL.png" alt="Logo Bancosol">
-            <%if (editando){%>
-                <h1>GESTIÓN DE CAMPAÑAS - Editar Campaña</h1>
-            <%} else {%>
-                <h1>GESTIÓN DE CAMPAÑAS - Crear Nueva Campaña</h1>
-            <%};%>
-
-        </header>
+    <jsp:include page="../shared/navbar.jsp"/>
         <main class="campanya-page">
             <section class="campanya-form-wrapper">
                 <div class="campanya-header">
                     <div>
-                        <h2>Datos de la campaña</h2>
+                        <h2>Datos de la <%= editando ? "" : "nueva" %> campaña</h2>
                         <p>Completa los datos básicos y selecciona las cadenas participantes.</p>
                     </div>
                 </div>
@@ -52,7 +44,7 @@
                             <h3 class="form-section-title">Información principal</h3>
                             <div class="form-group">
                                 <label for="nombreCampanya">Nombre de la Campaña</label>
-                                <input id="nombreCampanya" type="text" name="nombreCampanya" value="<%= editando ? nombreCampanyaActual : "" %>" required>
+                                <input id="nombreCampanya" type="text" name="nombreCampanya" value="<%= editando ? nombreCampanyaActual : "" %>" required placeholder="Nueva campaña">
                             </div>
                         </section>
                         <section class="form-section">
@@ -69,13 +61,18 @@
                         </section>
                         <section class="form-section">
                             <h3 class="form-section-title">Tipo de Campaña</h3>
-                            <div class="radio-grid">
-                                <%for (TipoCampanya t: tiposCapanyas){%>
-                                    <label class="option-card">
-                                        <input type="radio" name="tipoCampanya" value="<%= t.getId() %>" <%= editando && tipoCampanyaActual != null && tipoCampanyaActual.getId().equals(t.getId()) ?  "checked" : "" %> required>
-                                        <span><%=t.getNombre()%></span>
-                                    </label>
-                                <%};%>
+
+                            <div class="form-group">
+                                <select id="tipoCampanya" name="tipoCampanya" class="campanya-select" required>
+                                    <option value="">Selecciona un tipo</option>
+
+                                    <% for (TipoCampanya t : tiposCapanyas) { %>
+                                    <option value="<%= t.getId() %>"
+                                            <%= editando && tipoCampanyaActual != null && tipoCampanyaActual.getId().equals(t.getId()) ? "selected" : "" %>>
+                                        <%= t.getNombre() %>
+                                    </option>
+                                    <% }; %>
+                                </select>
                             </div>
                         </section>
                         <section class="form-section">
@@ -91,8 +88,8 @@
                                     </label>
                                 <%};%>
                             </div>
-                            <section class="info-box">
-                                ** Añadir aquí botones para la edición de cadenas.
+                            <section class="cadenas-btns">
+
                             </section>
                         </section>
                         <section class="form-actions">
