@@ -69,10 +69,10 @@
                     <% if (editando) { %>
                     <a href="/campanyas/gestionarCadenas" class="btn-outline">Salir sin guardar</a>
                     <% } else { %>
-                    <a href="/campanyas/gestionarCadenas" class="btn-outline">Cancelar</a>
+                    <a href="/campanyas/gestionarCadenas" class="btn-danger-outline">Cancelar</a>
                     <% } %>
 
-                    <button type="submit" class="btn-primary">Guardar</button>
+                    <button type="submit" class="btn-primary" style="font-size: 16px">Guardar</button>
                 </section>
 
             </form>

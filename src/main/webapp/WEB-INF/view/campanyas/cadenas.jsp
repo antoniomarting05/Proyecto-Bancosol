@@ -25,20 +25,26 @@
         <form class="cadena-delete-form" action="/campanyas/eliminarCadenasSistema" method="post">
 
         <div class="cadena-list-header">
-            <div class="cadena-list-title">
-                <h2>Gestión de Cadenas</h2>
-                <p>Modifica, añade u elimina datos de cadenas registradas en el sistema.</p>
+            <div style="display: flex; flex-direction: row">
+                <div class = "btn-previous-page">
+                    <a href="/campanyas">←</a>
+                </div>
+                <div class="cadena-list-title">
+                    <h2>Gestión de Cadenas</h2>
+                    <p>Modifica, añade u elimina datos de cadenas registradas en el sistema.</p>
+                </div>
             </div>
+
 
             <div class="cadena-header-actions">
                 <%if (!eliminar){%>
                 <a class="btn-outline btn-outline-danger" style="color: #ef4444; border-color: #ef4444; text-decoration: none" href="/campanyas/seleccionCadenasEliminar">Eliminar cadenas</a>
-                <a class="cadena-create-btn" href="/campanyas/crearCadena">
+                <a class="btn-primary" href="/campanyas/crearCadena" style="text-decoration: none">
                     <span class="cadena-create-icon">+</span>
                     <span>Nueva cadena</span>
                 </a>
                 <%} else {%>
-                <button type="submit" class="btn-outline btn-outline-danger" style="color: #ef4444; border-color: #ef4444; font-size: 17px">Confirmar y eliminar</button>
+                <button type="submit" class="btn-outline btn-outline-danger" style="color: #ef4444; border-color: #ef4444; font-size: 16.5px">Confirmar y eliminar</button>
                 <a class="btn-outline" href="/campanyas/gestionarCadenas" style="text-decoration: none">Cancelar selección</a>
                 <%};%>
             </div>
