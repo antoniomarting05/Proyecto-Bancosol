@@ -1,5 +1,5 @@
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.Colaborador" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.ContactoColaborador" %><%--
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.dto.Colaborador" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.dto.ContactoColaborador" %><%--
   Created by IntelliJ IDEA.
   User: marin
   Date: 29/04/2026

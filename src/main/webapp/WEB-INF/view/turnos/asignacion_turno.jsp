@@ -1,6 +1,5 @@
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.TiendaCampanya" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.VistaAsignacionColaboradores" %><%-- Created by IntelliJ IDEA. User: javie Date: 18/04/2026 Time: 23:35 To
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.dto.AsignacionTurno" %><%-- Created by IntelliJ IDEA. User: javie Date: 18/04/2026 Time: 23:35 To
 change this template use File | Settings | File Templates. --%> <%@ page
 contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -11,11 +10,11 @@ contentType="text/html;charset=UTF-8" language="java" %>
 </head>
 <body>
   <%
-    List<VistaAsignacionColaboradores> tiendas = (List<VistaAsignacionColaboradores>) request.getAttribute("asignacionColaboradores");
+    List<AsignacionTurno> tiendas = (List<AsignacionTurno>) request.getAttribute("asignacionColaboradores");
   %>
 <jsp:include page="../shared/navbar.jsp"/>
 
-<div class="page-wrapper">
+<main class="page-wrapper">
 
   <div class="left-column">
     <div class="table-container card">
@@ -33,7 +32,7 @@ contentType="text/html;charset=UTF-8" language="java" %>
         </tr>
         </thead>
         <tbody id="table-body">
-        <% for(VistaAsignacionColaboradores tienda: tiendas ) { %>
+        <% for(AsignacionTurno tienda: tiendas ) { %>
         <tr data-id="<%= tienda.getIdTiendaCampanya() %>" data-li="<%= tienda.getLineales()%>">
           <td class="font-medium text-blue"><%= tienda.getTienda() %></td>
           <td><%= tienda.getDomicilio() %> </td>
@@ -54,8 +53,10 @@ contentType="text/html;charset=UTF-8" language="java" %>
     <div id="info-container" class="card side-panel">
     </div>
   </div>
+</main>
 
-</div>
+  <jsp:include page="../shared/footer.jsp"/>
+
   <script>
 	const table = document.querySelector("#table-body");
 	const form = document.querySelector("#volunteer-container");

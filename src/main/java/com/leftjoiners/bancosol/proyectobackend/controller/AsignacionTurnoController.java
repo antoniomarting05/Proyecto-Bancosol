@@ -1,10 +1,16 @@
+/*
+Javier Urbaneja Benítez: 100%
+*/
+
 package com.leftjoiners.bancosol.proyectobackend.controller;
 
 import com.leftjoiners.bancosol.proyectobackend.dao.*;
-import com.leftjoiners.bancosol.proyectobackend.entity.AsignacionTurno;
-import com.leftjoiners.bancosol.proyectobackend.entity.Colaborador;
-import com.leftjoiners.bancosol.proyectobackend.entity.TiendaCampanya;
-import com.leftjoiners.bancosol.proyectobackend.entity.VistaAsignacionColaboradores;
+import com.leftjoiners.bancosol.proyectobackend.dto.AsignacionTurno;
+import com.leftjoiners.bancosol.proyectobackend.dto.Colaborador;
+import com.leftjoiners.bancosol.proyectobackend.dto.TiendaCampanya;
+import com.leftjoiners.bancosol.proyectobackend.dto.Turno;
+import com.leftjoiners.bancosol.proyectobackend.service.*;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,26 +23,21 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/turnos")
 public class AsignacionTurnoController {
-    @Autowired
-    protected TiendaCampanyaRepository tiendaCampanyaRepository;
-
-    @Autowired
-    protected AsignacionColaboradoresRepository asignacionColaboradoresRepository;
+    private final TiendaCampanyaService tiendaCampanyaService;
+    private final AsignacionTurnoService asignacionTurnoService;
+    private final TurnoService turnoService;
+    private final ColaboradorService colaboradorService;
+    private final TipoTurnoService tipoTurnoService;
 
     @Autowired
     protected TipoTurnoRepository tipoTurnoRepository;
 
-    @Autowired
-    protected ColaboradoresRespository colaboradoresRespository;
-
-    @Autowired
-    protected AsignacionTurnoRepository asignacionTurnoRepository;
-
     @GetMapping("")
     public String doInit(Model model) {
-        List<VistaAsignacionColaboradores> asignacionColaboradores = asignacionColaboradoresRepository.findAll();
+        List<AsignacionTurno> asignacionColaboradores = asignacionTurnoService.listarAsignacionColaboradores();
 
         model.addAttribute("asignacionColaboradores", asignacionColaboradores);
         model.addAttribute("currentSection", "turnos");
@@ -44,15 +45,15 @@ public class AsignacionTurnoController {
     }
 
     @PostMapping("/buscarTurno")
-    public String buscarTurno(@RequestParam(value = "id", required = false) Integer id,
+    public String buscarTurno(@RequestParam(value = "id", required = false) Integer idTienda,
                               @RequestParam(value = "turno", required = false) Integer turno,
                               @RequestParam(value = "lineales", required = false) Integer lineales,
                               @RequestParam(value = "linealActual", required = false) Integer linealActual,
                               Model model) {
-        TiendaCampanya tiendaCampanya = tiendaCampanyaRepository.findById(id).orElse(null);
-        AsignacionTurno asignacionTurno = this.asignacionTurnoRepository.buscarTurnoEspecifico(id, turno, linealActual).orElse(null);
 
-        model.addAttribute("id", id);
+        Turno asignacionTurno = this.turnoService.buscarTurnoEspecifico(idTienda, turno, linealActual);
+        TiendaCampanya tiendaCampanya = this.tiendaCampanyaService.buscarTiendaCampanya(idTienda);
+
         model.addAttribute("turno", turno);
         model.addAttribute("lineales", lineales);
         model.addAttribute("linealActual", linealActual);
@@ -67,21 +68,24 @@ public class AsignacionTurnoController {
                               @RequestParam(value = "turno", required = false) Integer turno,
                               @RequestParam(value = "lineal", required = false) Integer lineal,
                               Model model) {
-        TiendaCampanya tienda = tiendaCampanyaRepository.findById(id).orElse(null);;
-        AsignacionTurno asignacionTurno = this.asignacionTurnoRepository.buscarTurnoEspecifico(id, turno, lineal).orElse(null);
+        TiendaCampanya tienda = this.tiendaCampanyaService.buscarTiendaCampanya(id);
+        Turno asignacionTurno = this.turnoService.buscarTurnoEspecifico(id, turno, lineal);
         Colaborador colaborador = null;
 
-        if (asignacionTurno != null) colaborador = asignacionTurno.getColaborador();
-
-        if (asignacionTurno == null) {
-            asignacionTurno = new AsignacionTurno();
-            asignacionTurno.setTiendaCampanya(tienda);
-            asignacionTurno.setLineal(lineal);
-            asignacionTurno.setTipoTurno(this.tipoTurnoRepository.findById(turno).orElse(null));
+        if (asignacionTurno != null && asignacionTurno.getColaborador() != null) {
+            colaborador = this.colaboradorService.buscarColaborador(asignacionTurno.getColaborador().getId());
         }
 
-        model.addAttribute("colaboradores", this.colaboradoresRespository.findAll());
+        if (asignacionTurno == null) {
+            asignacionTurno = new Turno();
+            asignacionTurno.setTiendaCampanya(tienda);
+            asignacionTurno.setLineal(lineal);
+            asignacionTurno.setTipoTurno(this.tipoTurnoService.buscarTipoTurno(turno));
+        }
+
+        model.addAttribute("colaboradores", this.colaboradorService.listarColaboradores());
         model.addAttribute("colaborador", colaborador);
+        model.addAttribute("tienda", tienda.getTienda());
         model.addAttribute("asignacionTurno", asignacionTurno);
         model.addAttribute("currentSection", "turnos");
         return "turnos/formulario_turno";
@@ -97,24 +101,17 @@ public class AsignacionTurnoController {
                                @RequestParam("horaFin") LocalTime horaFin,
                                @RequestParam("numVoluntarios") Integer numVoluntarios,
                                @RequestParam("observaciones") String observaciones) {
-        AsignacionTurno asignacionTurno = new AsignacionTurno();
-        asignacionTurno.setId(id);
-        asignacionTurno.setTiendaCampanya(tiendaCampanyaRepository.findById(tiendaCampanyaId).orElse(null));
-        asignacionTurno.setLineal(lineal);
-        asignacionTurno.setTipoTurno(this.tipoTurnoRepository.findById(tipoTurnoId).orElse(null));
-        asignacionTurno.setColaborador(this.colaboradoresRespository.findById(idColaborador).orElse(null));
-        asignacionTurno.setHoraInicio(horaInicio);
-        asignacionTurno.setHoraFin(horaFin);
-        asignacionTurno.setNumVoluntarios(numVoluntarios);
-        asignacionTurno.setObservaciones(observaciones);
-        this.asignacionTurnoRepository.save(asignacionTurno);
+        this.turnoService.guardarTurno(
+                id, tiendaCampanyaId, tipoTurnoId, lineal, idColaborador,
+                horaInicio, horaFin, numVoluntarios, observaciones
+        );
 
         return "redirect:/turnos";
     }
 
     @PostMapping("/buscarColaborador")
     public String buscarColaborador(@RequestParam("id") Integer id, Model model) {
-        Colaborador colaborador = this.colaboradoresRespository.findById(id).get();
+        Colaborador colaborador = this.colaboradorService.buscarColaborador(id);
 
         model.addAttribute("colaborador", colaborador);
 

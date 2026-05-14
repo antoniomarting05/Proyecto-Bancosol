@@ -10,7 +10,7 @@
     }
 %>
 
-<div class="main-header">
+<header class="main-header">
     <div class="top-navbar">
         <div class="logo-container">
             <img src="/images/LOGO_BANCOSOL.png" alt="Logo Bancosol" class="logo-img">
@@ -71,4 +71,4 @@
             </a>
         </div>
     </nav>
-</div>
+</header>

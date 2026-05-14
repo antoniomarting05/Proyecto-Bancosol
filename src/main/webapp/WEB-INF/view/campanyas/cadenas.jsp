@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.Cadena" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -13,7 +14,7 @@
 
 <body>
 <%
-    List<Cadena> listaCadenas = (List<Cadena>) request.getAttribute("cadenasSistema");
+    List<CadenaEntity> listaCadenas = (List<CadenaEntity>) request.getAttribute("cadenasSistema");
     Boolean eliminar = (Boolean) request.getAttribute("eliminar");
 %>
 
@@ -63,7 +64,7 @@
                     </thead>
 
                     <tbody>
-                    <% for (Cadena cadena : listaCadenas) { %>
+                    <% for (CadenaEntity cadena : listaCadenas) { %>
                     <tr>
                         <td>
                             <div class="cadena-row-actions">

@@ -1,10 +1,9 @@
 package com.leftjoiners.bancosol.proyectobackend.controller;
 
 import com.leftjoiners.bancosol.proyectobackend.dao.*;
-import com.leftjoiners.bancosol.proyectobackend.entity.Cadena;
-import com.leftjoiners.bancosol.proyectobackend.entity.Campanya;
+import com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity;
+import com.leftjoiners.bancosol.proyectobackend.entity.CampanyaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Locale;
 
 @RequestMapping("/campanyas")
 @Controller
@@ -65,13 +62,13 @@ public class CampanyasController {
             @RequestParam(value = "cadenaParticipa", required = false) List<Integer> cadenasSeleccionadas
             ) {
 
-        Campanya campanya;
+        CampanyaEntity campanya;
 
         if (id != null) {
             campanya = campanyaRepo.findById(id).get();
             campanya.setId(id);
         } else {
-            campanya = new Campanya();
+            campanya = new CampanyaEntity();
         }
 
         campanya.setNombre(nombre);
@@ -94,7 +91,7 @@ public class CampanyasController {
 
     @GetMapping("/editarCampanya")
     public String editarCampanya(@RequestParam("id") Integer id, Model model) {
-        Campanya campanya = campanyaRepo.findById(id).get();
+        CampanyaEntity campanya = campanyaRepo.findById(id).get();
         if (campanya == null) {
             return "redirect:/campanyas";
         }
@@ -107,7 +104,7 @@ public class CampanyasController {
         model.addAttribute("fechaFin", campanya.getFechaFin());
         model.addAttribute("tipoCampanyaActual", campanya.getTipoCampanya());
 
-        List<Cadena> cadenasCampanya = campanya.getCadenasParticipantes();
+        List<CadenaEntity> cadenasCampanya = campanya.getCadenasParticipantes();
         model.addAttribute("cadenasCampanyaActual", cadenasCampanya);
         model.addAttribute("editando", true);
 
@@ -152,7 +149,7 @@ public class CampanyasController {
 
     @GetMapping("/gestionarCadenas")
     public String gestionarCadenas(Model model){
-        List<Cadena> listaCadenas = cadenasRepo.findAll();
+        List<CadenaEntity> listaCadenas = cadenasRepo.findAll();
 
         model.addAttribute("cadenasSistema", listaCadenas);
         model.addAttribute("currentSection", "campanyas");
@@ -162,7 +159,7 @@ public class CampanyasController {
 
     @GetMapping("/seleccionCadenasEliminar")
     public String seleccionarCadenasEliminar(Model model){
-        List<Cadena> listaCadenas = cadenasRepo.findAll();
+        List<CadenaEntity> listaCadenas = cadenasRepo.findAll();
 
         model.addAttribute("cadenasSistema", listaCadenas);
         model.addAttribute("currentSection", "campanyas");
@@ -180,7 +177,7 @@ public class CampanyasController {
     public String editarCadena(Model model,
                                @RequestParam("id")Integer idCadena
                                 ){
-        Cadena cadenaActual = cadenasRepo.findById(idCadena).get();
+        CadenaEntity cadenaActual = cadenasRepo.findById(idCadena).get();
 
         model.addAttribute("nombreCadena", cadenaActual.getNombre());
         model.addAttribute("codigoCadena", cadenaActual.getCodigo());
@@ -197,11 +194,11 @@ public class CampanyasController {
                                 @RequestParam("codigo") String codigoCadena,
                                 @RequestParam(required = false, value = "id" ) Integer idCadena
                                 ){
-        Cadena cadenaActual;
+        CadenaEntity cadenaActual;
         if (idCadena != null){
              cadenaActual = cadenasRepo.findById(idCadena).get();
         } else {
-            cadenaActual = new Cadena();
+            cadenaActual = new CadenaEntity();
         }
 
         cadenaActual.setNombre(nombreCadena);

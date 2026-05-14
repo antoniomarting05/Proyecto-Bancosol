@@ -11,6 +11,7 @@
     <title>Inicie sesión</title>
 </head>
 <body>
+<script src="https://cdn.tailwindcss.com"></script>
 <div class="flex justify-center items-center h-full">
 <div class="w-full max-w-sm bg-white border border-gray-200 p-8 rounded-lg">
     <!-- Título simple -->
@@ -43,6 +44,5 @@
     </div>
 </div>
 </div>
-<script src="https://cdn.tailwindcss.com"></script>
 </body>
 </html>
