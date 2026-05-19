@@ -25,7 +25,7 @@
         Integer idCampanyaActual = (Integer) request.getAttribute("idCampanya");
         Object fechaInicioActual = request.getAttribute("fechaInicio");
         Object fechaFinActual = request.getAttribute("fechaFin");
-        TipoCampanyaEntity tipoCampanyaActual = (TipoCampanyaEntity) request.getAttribute("tipoCampanyaActual");
+        TipoCampanya tipoCampanyaActual = (TipoCampanya) request.getAttribute("tipoCampanyaActual");
         List<Cadena> cadenasCampanyaActual = (List<Cadena>) request.getAttribute("cadenasCampanyaActual");
 
     %>
@@ -86,11 +86,12 @@
                             <div class="checkbox-grid">
                                 <% for (Cadena c: listaCadenas){%>
                                     <label class="checkbox-card">
-                                        <input type="checkbox" name="cadenaParticipa" value="<%=c.getId()%>" <%= editando && cadenasCampanyaActual != null && cadenasCampanyaActual.contains(c) ? "checked" : ""%>>
+                                        <input type="checkbox" name="cadenaParticipa" value="<%=c.getId()%>" <%= editando && cadenasCampanyaActual != null && cadenasCampanyaActual.stream().anyMatch(cad -> cad.getId().equals(c.getId())) ? "checked" : ""%>>
                                         <span><%= c.getNombre()%></span>
                                     </label>
                                 <%};%>
                             </div>
+
                             <section class="cadenas-btns">
 
                             </section>
@@ -101,8 +102,9 @@
                             <%} else {%>
                                 <a href="/campanyas" class="btn-outline">Cancelar</a>
                            <%};%>
-                            <button type="submit" class="btn-primary" style="font-size: 15px ; " >Guardar</button>
-
+                            <a class="btn-primary">
+                                <button type="submit" class="btn-primary" style="font-size: 15px ; padding: 0px" >Guardar</button>
+                            </a>
                         </section>
 
                     </form>
