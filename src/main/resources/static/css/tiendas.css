@@ -2,7 +2,7 @@
     display: flex;
     /* Quitamos el gap de aquí para que no deje un espacio vacío cuando el panel esté oculto */
     padding: 25px;
-    height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px);
     box-sizing: border-box;
 }
 
@@ -153,4 +153,68 @@
     align-items: center;
     justify-content: center;
     color: var(--primary-blue);
+}
+
+/* FILTRADO */
+/* Convertimos el formulario en un Grid de 2 columnas */
+#filtrado-tiendas {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 10px 25px; /* 15px de espacio vertical, 25px horizontal */
+    width: 100%;
+    align-items: end; /* Alinea todo abajo por si los textos varían */
+    margin-top: 10px;
+}
+
+/* Estructura vertical de cada bloque de filtro */
+.filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Espacio entre el texto del label y el selector */
+}
+
+.filtro-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.filtro-group select {
+    padding: 8px 12px; /* Unificado y limpio */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Manejo del cuarto bloque (el del botón) */
+.boton-container {
+    grid-column: 1; /* Le decimos que se quede estrictamente en la columna 1 */
+    justify-self: start; /* Se encoge y se pega a la izquierda en lugar de estirarse */
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.label-spacer {
+    height: 1.2rem; /* Simula la altura del label de los otros bloques para que el botón baje */
+}
+
+.btn-filtrar {
+    padding: 8px 24px; /* Un poco más de margen lateral para que sea fácil hacer clic */
+    font-size: 0.9rem;
+    font-weight: 700; /* Letra un poco más gordita para que destaque */
+    cursor: pointer;
+    background-color: transparent; /* Sin relleno */
+    color: var(--primary-blue, #1e3a8a); /* Texto azul oscuro */
+
+    /* Mantenemos un borde sutil acorde a tu clase 'btn-outline',
+       si lo quieres 100% invisible quita esta línea de border */
+    border: 2px solid var(--primary-blue, #1e3a8a);
+    border-radius: 6px;
+
+    transition: all 0.2s ease;
+}
+
+/* Efecto al pasar el ratón para que el usuario sepa que es clickeable */
+.btn-filtrar:hover {
+    background-color: rgba(30, 58, 138, 0.05); /* Un fondo gris/azulado súper clarito */
+    transform: translateY(-1px); /* Se levanta un pixel, da un toque muy premium */
 }

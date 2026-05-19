@@ -85,7 +85,7 @@
             <button type="submit" class="btn-submit">Guardar Turno</button>
         </form>
     </div>
-    <div id="colaborador_container">
+    <div id="colaborador_container" class="card side-panel" style="margin: 30px 0">
         <%if (colaboradorModal != null){%>
             <jsp:include page="../colaboradores/info_colaboradores.jsp"/>
         <%}%>

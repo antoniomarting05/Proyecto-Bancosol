@@ -16,25 +16,38 @@
 <%Colaborador colaborador = (Colaborador) request.getAttribute("colaborador");%>
 
 <div id="colaborador-container">
-    <p>Colaborador seleccionado</p>
     <div id="colaborador-localization">
         <p id="lbl-colaborador"><%=colaborador.getNombre()%></p>
         <p id="lbl-domicilio"><%=colaborador.getDomicilio()%></p>
-        <p class="text-mutex"><%=colaborador.getCodigo()%>, <%=colaborador.getLocalidadSede().getNombre()%></p>
-        <p class="text-mutex">Colabora en: <%=colaborador.getColaboraEn().getNombre()%></p>
+        <p class="text-muted"><%=colaborador.getCodigo()%>, <%=colaborador.getLocalidadSede().getNombre()%></p>
+        <p class="text-muted">Colabora en: <%=colaborador.getColaboraEn().getNombre()%></p>
     </div>
     <div id="colaborador-schedule">
         <div id="contactosCard">
             <%for (ContactoColaborador c : colaborador.getContactos()){%>
-                <div class="contacto">
-                    <p>Nombre: <%=c.getNombre()%></p>
-                    <p>Email: <%=c.getEmail()%></p>
-                    <p>Teléfono: <%=c.getTelefono()%></p>
+                <div class="info-card">
+                    <div class="info-header">
+                        <div class="info-main">
+                            <p class="lbl-capitan"><%=c.getNombre()%></p>
+                        </div>
+                        <div class="info-side">
+                            <div>TELÉFONO</div>
+                            <div><%=c.getTelefono() != null ? c.getTelefono() : "--"%></div>
+                        </div>
+                    </div>
+                    <div class="info-body">
+                        <p><strong>Email: </strong><%=c.getEmail() != null ? c.getEmail() : "--"%></p>
+                    </div>
                 </div>
             <%}%>
         </div>
         <div id="colaborador-observaciones">
-            <p><%=colaborador.getObservaciones() != null && !colaborador.getObservaciones().isEmpty() ? colaborador.getObservaciones() : "Sin observaciones."%></p>
+            <p class="section-title">Observaciones</p>
+            <div class="info-card">
+                <div class="info-body">
+                    <p><%=colaborador.getObservaciones() != null && !colaborador.getObservaciones().isEmpty() ? colaborador.getObservaciones() : "Sin observaciones"%></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

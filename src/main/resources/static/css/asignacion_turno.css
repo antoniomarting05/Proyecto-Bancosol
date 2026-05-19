@@ -3,7 +3,7 @@
 	display: flex;
 	/* Quitamos el gap de aquí para que no deje un espacio vacío cuando el panel esté oculto */
 	padding: 25px;
-	height: calc(100vh - 80px);
+	min-height: calc(100vh - 80px);
 	box-sizing: border-box;
 }
 

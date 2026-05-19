@@ -1,9 +1,10 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.TiendaEntity" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.TiendaCampanyaEntity" %>
-<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CampanyaEntity" %>
 <%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.TiendaCampanyaEntity" %>
 <%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.TiendaEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.ZonaEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.LocalidadEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.ColaboradorEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -14,7 +15,13 @@
 <body>
 <%
     List<TiendaEntity> tiendas = (List<TiendaEntity>) request.getAttribute("tiendas");
-    List<TiendaCampanyaEntity> tiendaCampanyas = (List<TiendaCampanyaEntity>)request.getAttribute("tiendaCampanyas");
+    //List<TiendaCampanyaEntity> tiendaCampanyas = (List<TiendaCampanyaEntity>)request.getAttribute("tiendaCampanyas");
+
+    List<CadenaEntity> cadenas = (List<CadenaEntity>) request.getAttribute("cadenas");
+    List<ZonaEntity> zonas = (List<ZonaEntity>) request.getAttribute("zonas");
+    List<LocalidadEntity> localidades = (List<LocalidadEntity>) request.getAttribute("localidades");
+    //List<ColaboradorEntity> colaboradores = (List<ColaboradorEntity>) request.getAttribute("colaboradores"); //COORDINADORES VIENE DE AQUI? O NO??
+
 %>
 
 <jsp:include page="../shared/navbar.jsp"/>
@@ -23,15 +30,58 @@
     <div class="page-wrapper">
 
         <div class="left-column">
+            <div>
+                <h1>Gestión de Tiendas</h1>
+                <p>Consulta, filtra y crea tiendas</p>
+            </div>
 
             <div class="header-actions">
-                <div id="filtrado-tiendas">
-                    <select name="cadena" id="cadena-tienda" class="btn-outline" style="padding: 5px 15px;">
-                        <option value="">Filtrar por Cadena...</option>
-                        <%-- Aquí iría tu bucle de cadenas --%>
-                    </select>
-                </div>
+
+
+                <form id="filtrado-tiendas" action="/tiendas/filtrarTiendas" method="post">
+
+                    <div class="filtro-group">
+                        <label for="cadena-tienda">Filtrar por Cadena</label>
+                        <select name="cadena-tienda" id="cadena-tienda" class="btn-outline" style="padding: 5px 15px;">
+                            <option value="">Sin Filtro</option>
+                            <% for(CadenaEntity c : cadenas){ %>
+                            <option value="<%=c.getId()%>"><%=c.getNombre()%></option>
+                            <% } %>
+                        </select>
+
+                    </div>
+
+                    <div class="filtro-group">
+                        <label for="zona-tienda">Filtrar por Zona</label>
+                        <select name="zona-tienda" id="zona-tienda" class="btn-outline" style="padding: 5px 15px;">
+                            <option value="">Sin Filtro</option>
+                            <% for(ZonaEntity z : zonas){ %>
+                            <option value="<%=z.getId()%>"><%=z.getNombre()%></option>
+                            <% } %>
+                        </select>
+
+                    </div>
+
+                    <div class="filtro-group">
+                        <label for="localidad-tienda">Filtrar por Localidad</label>
+                        <select name="localidad-tienda" id="localidad-tienda" class="btn-outline" style="padding: 5px 15px;">
+                            <option value="">Sin Filtro</option>
+                            <% for(LocalidadEntity l : localidades){ %>
+                            <option value="<%=l.getId()%>"><%=l.getNombre()%></option>
+                            <% } %>
+                        </select>
+                    </div>
+
+
+
+
+                    <div class="filtro-group boton-container">
+                        <span class="label-spacer"></span>
+                        <button type="submit" class="btn-outline btn-filtrar">Filtrar</button>
+                    </div>
+                </form>
             </div>
+
 
             <section class="tiendas-container">
                 <div class="table-container card">
@@ -55,7 +105,7 @@
                         <tr data-id="<%=tienda.getId()%>">
                             <td class="font-medium text-blue"><%= tienda.getNombre() %></td>
                             <td style="text-align: center;">
-                                <input type="checkbox" name="participa" value="<%=tienda.getId()%>">
+                                <input type="checkbox" name="participa" value="<%=tienda.getId()%>">    <%-- checked si participa en tiendaCampanya? --%>
                             </td>
                             <td class="small-td"><%= tienda.getDomicilio() %></td>
                             <td><%= tienda.getLocalidad().getNombre() %></td>
@@ -93,77 +143,6 @@
 
 <jsp:include page="../shared/footer.jsp"/>
 
-<script>
-    const tableBody = document.querySelector("#table-body-tiendas");
-    const rightColumn = document.querySelector(".right-column");
-    const infoContainer = document.querySelector("#info-container-tienda");
-
-    let idTiendaActual = null;
-    infoContainer.innerHTML = "";
-
-    // Función para pedir el HTML al servidor
-    function fetchTiendaDetalle() {
-        if (!idTiendaActual) return;
-
-        // Petición al Servlet (puedes usar GET o POST según tu Java)
-        fetch(`/tiendas/obtenerFormularioEdicion?id=${data-id}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Error en la red");
-                return response.text(); // Recibimos el HTML generado por el JSP/Servlet
-            })
-            .then(html => {
-                // Inyectamos el HTML recibido
-                infoContainer.innerHTML = html;
-                // Abrimos el panel con la animación
-                rightColumn.classList.add("open");
-            })
-            .catch(error => console.error("Error al cargar detalle:", error));
-    }
-
-    // Evento al hacer clic en la fila de la tabla
-    tableBody.addEventListener("click", (e) => {
-        const row = e.target.closest("tr");
-        if (!row) return;
-
-        // Si ya está seleccionada, cerramos
-        if (row.classList.contains("selected")) {
-            cerrarPanel();
-            return;
-        }
-
-        // Marcar fila seleccionada
-        tableBody.querySelectorAll("tr").forEach(r => r.classList.remove("selected"));
-        row.classList.add("selected");
-
-        // Guardar ID y pedir datos
-        idTiendaActual = row.dataset.id;
-        fetchTiendaDetalle();
-    });
-
-    // Función para cerrar y limpiar
-    function cerrarPanel() {
-        rightColumn.classList.remove("open");
-        tableBody.querySelectorAll("tr").forEach(r => r.classList.remove("selected"));
-        idTiendaActual = null;
-
-        // Limpiamos el HTML después de que termine la animación de cierre (300ms)
-        setTimeout(() => {
-            infoContainer.innerHTML = "";
-        }, 300);
-    }
-
-    // Delegación de eventos para botones inyectados (Cerrar y Guardar)
-    infoContainer.addEventListener("click", (e) => {
-        if (e.target.id === "cancel-button") {
-            cerrarPanel();
-        }
-
-        if (e.target.id === "create-button") {
-            // Aquí iría tu lógica para enviar el formulario
-            console.log("Enviando cambios de la tienda:", idTiendaActual);
-        }
-    });
-</script>
 
 </body>
 </html>

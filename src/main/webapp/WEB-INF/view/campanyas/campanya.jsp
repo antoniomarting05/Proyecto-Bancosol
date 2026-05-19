@@ -3,6 +3,8 @@
 <%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CampanyaEntity" %>
 <%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity" %>
 <%@ page import="com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.dto.Campanya" %>
+<%@ page import="com.leftjoiners.bancosol.proyectobackend.dto.Cadena" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,7 +16,7 @@
     </head>
     <body>
     <%
-        List<CampanyaEntity> listaCampanyas = (List<CampanyaEntity>) request.getAttribute("campanyas");
+        List<Campanya> listaCampanyas = (List<Campanya>) request.getAttribute("campanyas");
         Boolean eliminar = (Boolean) request.getAttribute("eliminar");
     %>
 
@@ -60,7 +62,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for(CampanyaEntity campanya : listaCampanyas) { %>
+                        <% for(Campanya campanya : listaCampanyas) { %>
                         <tr>
                             <td>
                                 <div class="campanya-row-actions">
@@ -79,7 +81,7 @@
                             <td><%= campanya.getFechaInicio().toString() %></td>
                             <td><%= campanya.getFechaFin().toString() %></td>
                             <td>
-                                <% for (CadenaEntity c: campanya.getCadenasParticipantes()){%>
+                                <% for (Cadena c: campanya.getCadenasParticipantes()){%>
                                 <span class="cadena-chip"><%=c.getNombre()%></span>
                                 <%};%>
                                 <%=campanya.getCadenasParticipantes().isEmpty() ? "Sin cadenas participantes" : ""%>

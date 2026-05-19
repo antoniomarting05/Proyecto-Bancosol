@@ -9,23 +9,20 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="/css/colaboradores.css ">
 </head>
 <body>
     <div class="buttons-section">
         <div class="flex-buttons">
-            <div class="column-button">
-                <button class="btn-primary" id="anadir-b">Añadir colaborador</button>
-                <button id="cancel-button">Eliminar colaborador</button>
-            </div>
-            <div class="column-button">
-                <button class="btn-outline" id="modificar-b">Modificar colaborador</button>
-                <button class="btn-outline" id="asignar-b">Asignar a tienda</button>
-            </div>
+            <button class="btn-primary" id="anadir-b">Añadir colaborador</button>
+            <button class="btn-outline" id="modificar-b">Modificar colaborador</button>
+            <button class="btn-outline" id="cancel-button">Eliminar colaborador</button>
+            <button class="btn-outline" id="asignar-b">Asignar a tienda</button>
         </div>
         <div class="flex-action-buttons">
-            <button id="cancelar-b">Cancelar</button>
-            <button id="guardar-b">Guardar</button>
-            <button id="exportar-b">Exportar</button>
+            <button id="create-button">Guardar</button>
+            <button id="cancel-button">Cancelar</button>
+            <button id="export-button">Exportar</button>
         </div>
     </div>
 </body>
