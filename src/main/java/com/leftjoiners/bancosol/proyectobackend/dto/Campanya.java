@@ -17,6 +17,6 @@ public class Campanya {
     private LocalDate fechaFin;
     private Integer duracion;
 
-    private List<Integer> cadenasParticipantes;
+    private List<Cadena> cadenasParticipantes;
     private List<Integer> tiendasCampanya;
 }

@@ -5,7 +5,9 @@ IA: 20%
 
 package com.leftjoiners.bancosol.proyectobackend.mapper;
 
+import com.leftjoiners.bancosol.proyectobackend.dto.Cadena;
 import com.leftjoiners.bancosol.proyectobackend.dto.Campanya;
+import com.leftjoiners.bancosol.proyectobackend.dto.ContactoColaborador;
 import com.leftjoiners.bancosol.proyectobackend.dto.TipoCampanya;
 import com.leftjoiners.bancosol.proyectobackend.entity.CampanyaEntity;
 import org.springframework.stereotype.Component;
@@ -33,9 +35,15 @@ public class CampanyaMapper extends MapperDTO<Campanya, CampanyaEntity> {
         }
 
         if (entity.getCadenasParticipantes() != null) {
-            dto.setCadenasParticipantes(entity.getCadenasParticipantes().stream()
-                    .map(c -> c.getId()).collect(Collectors.toList()));
+            dto.setCadenasParticipantes(entity.getCadenasParticipantes().stream().map(c -> {
+                Cadena cad = new Cadena();
+                cad.setId(c.getId());
+                cad.setCodigo(c.getCodigo());
+                cad.setNombre(c.getNombre());
+                return cad;
+            }).collect(Collectors.toList()));
         }
+
         if (entity.getTiendasCampanya() != null) {
             dto.setTiendasCampanya(entity.getTiendasCampanya().stream()
                     .map(tc -> tc.getId()).collect(Collectors.toList()));
