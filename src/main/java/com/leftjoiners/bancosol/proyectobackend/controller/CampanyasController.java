@@ -2,6 +2,7 @@ package com.leftjoiners.bancosol.proyectobackend.controller;
 
 import com.leftjoiners.bancosol.proyectobackend.dao.*;
 import com.leftjoiners.bancosol.proyectobackend.dto.Cadena;
+import com.leftjoiners.bancosol.proyectobackend.dto.Campanya;
 import com.leftjoiners.bancosol.proyectobackend.entity.CadenaEntity;
 import com.leftjoiners.bancosol.proyectobackend.entity.CampanyaEntity;
 import com.leftjoiners.bancosol.proyectobackend.service.CadenaService;
@@ -65,37 +66,14 @@ public class CampanyasController {
             @RequestParam("fechaFin") LocalDate fechaFin,
             @RequestParam(value = "cadenaParticipa", required = false) List<Integer> cadenasSeleccionadas
             ) {
-
-        CampanyaEntity campanya;
-
-        if (id != null) {
-            campanya = campanyaRepo.findById(id).get();
-            campanya.setId(id);
-        } else {
-            campanya = new CampanyaEntity();
-        }
-
-        campanya.setNombre(nombre);
-        campanya.setTipoCampanya(tipoCampanyaRepo.findById(idTipo).get());
-        campanya.setFechaInicio(fechaInicio);
-        campanya.setFechaFin(fechaFin);
-        if (cadenasSeleccionadas != null){
-            campanya.setCadenasParticipantes(cadenasRepo.findAllById(cadenasSeleccionadas));
-        }
-
-
-        int duracion = (int) ChronoUnit.DAYS.between(fechaInicio, fechaFin) + 1;
-        campanya.setDuracion(duracion);
-
-        campanyaRepo.save(campanya);
+        this.campanyasService.guardarCampanya(id, nombre, idTipo,
+                fechaInicio, fechaFin, cadenasSeleccionadas);
         return "redirect:/campanyas";
     }
 
-
-
     @GetMapping("/editarCampanya")
     public String editarCampanya(@RequestParam("id") Integer id, Model model) {
-        CampanyaEntity campanya = campanyaRepo.findById(id).get();
+        Campanya campanya = this.campanyasService.buscarCampanya(id);
         if (campanya == null) {
             return "redirect:/campanyas";
         }
@@ -108,7 +86,7 @@ public class CampanyasController {
         model.addAttribute("fechaFin", campanya.getFechaFin());
         model.addAttribute("tipoCampanyaActual", campanya.getTipoCampanya());
 
-        List<CadenaEntity> cadenasCampanya = campanya.getCadenasParticipantes();
+        List<Cadena> cadenasCampanya = campanya.getCadenasParticipantes();
         model.addAttribute("cadenasCampanyaActual", cadenasCampanya);
         model.addAttribute("editando", true);
 
@@ -134,12 +112,11 @@ public class CampanyasController {
     public String eliminarCampanyas(Model model,
                                   @RequestParam(required = false, value="campanyasElim") List<Integer> idCampanyasEliminar
                                   ){
-        if(idCampanyasEliminar!=null){
-            campanyaRepo.deleteAllById(idCampanyasEliminar);
+        if(idCampanyasEliminar != null){
+            this.campanyasService.eliminarCampanyas(idCampanyasEliminar);
         } else {
             return "redirect:/campanyas";
         }
-
 
         model.addAttribute("eliminar", false);
         return "redirect:/campanyas";
@@ -181,16 +158,15 @@ public class CampanyasController {
     public String editarCadena(Model model,
                                @RequestParam("id")Integer idCadena
                                 ){
-        CadenaEntity cadenaActual = cadenasRepo.findById(idCadena).get();
+        Cadena cadena = this.cadenaService.buscarCadena(idCadena);
 
-        model.addAttribute("nombreCadena", cadenaActual.getNombre());
-        model.addAttribute("codigoCadena", cadenaActual.getCodigo());
+        model.addAttribute("nombreCadena", cadena.getNombre());
+        model.addAttribute("codigoCadena", cadena.getCodigo());
         model.addAttribute("editando", true);
         model.addAttribute("idCadena", idCadena);
         model.addAttribute("currentSection", "campanyas");
 
         return "/campanyas/formularioCadena";
-
     }
 
     @PostMapping("/guardarCadena")
@@ -198,16 +174,7 @@ public class CampanyasController {
                                 @RequestParam("codigo") String codigoCadena,
                                 @RequestParam(required = false, value = "id" ) Integer idCadena
                                 ){
-        CadenaEntity cadenaActual;
-        if (idCadena != null){
-             cadenaActual = cadenasRepo.findById(idCadena).get();
-        } else {
-            cadenaActual = new CadenaEntity();
-        }
-
-        cadenaActual.setNombre(nombreCadena);
-        cadenaActual.setCodigo(codigoCadena);
-        cadenasRepo.save(cadenaActual);
+        this.cadenaService.guardarCadena(idCadena, nombreCadena, codigoCadena);
         return "redirect:/campanyas/gestionarCadenas";
     }
 
@@ -215,7 +182,7 @@ public class CampanyasController {
     public String guardarCadenas (@RequestParam(required = false, value = "cadenas") List<Integer> idCadenasEliminar){
 
         if(idCadenasEliminar != null){
-            cadenasRepo.deleteAllById(idCadenasEliminar);
+            this.cadenaService.eliminarCadenas(idCadenasEliminar);
         }
 
         return "redirect:/campanyas/gestionarCadenas";

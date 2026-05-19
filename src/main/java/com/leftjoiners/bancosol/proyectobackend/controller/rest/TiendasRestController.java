@@ -1,8 +1,6 @@
 package com.leftjoiners.bancosol.proyectobackend.controller.rest;
 
-
 import com.leftjoiners.bancosol.proyectobackend.dto.TiendaCampanya;
-import com.leftjoiners.bancosol.proyectobackend.dto.Turno;
 import com.leftjoiners.bancosol.proyectobackend.service.TiendaCampanyaService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

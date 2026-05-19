@@ -19,4 +19,9 @@ public class TipoCampanyaService {
         List<TipoCampanyaEntity> tipoCampanyas = this.tipoCampanyasRepository.findAll();
         return this.tipoCampanyaMapper.toDTOList(tipoCampanyas);
     }
+
+    public TipoCampanya buscarTipoCampanya(Integer id) {
+        TipoCampanyaEntity tipoCampanya = this.tipoCampanyasRepository.findById(id).orElse(null);
+        return this.tipoCampanyaMapper.toDTO(tipoCampanya);
+    }
 }

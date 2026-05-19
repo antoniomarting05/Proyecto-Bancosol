@@ -3,10 +3,7 @@ package com.leftjoiners.bancosol.proyectobackend.controller.rest;
 import com.leftjoiners.bancosol.proyectobackend.dto.Cadena;
 import com.leftjoiners.bancosol.proyectobackend.service.CadenaService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +17,32 @@ public class CadenaRestController {
     @GetMapping("/")
     public List<Cadena> doInit() {
         return this.cadenaService.listarCadenas();
+    }
+
+    @GetMapping("/{id}")
+    public Cadena buscarCadena(@PathVariable Integer id) {
+        return this.cadenaService.buscarCadena(id);
+    }
+
+    public record CadenaRequest(
+            Integer id,
+            String nombre,
+            String codigo
+    ) {}
+
+    @PostMapping("/guardar")
+    public void guardarCadena(@RequestBody CadenaRequest request) {
+        this.cadenaService.guardarCadena(
+                request.id(),
+                request.nombre(),
+                request.codigo()
+        );
+    }
+
+    @DeleteMapping("/eliminar")
+    public void eliminarCadenas(@RequestBody List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            this.cadenaService.eliminarCadenas(ids);
+        }
     }
 }
